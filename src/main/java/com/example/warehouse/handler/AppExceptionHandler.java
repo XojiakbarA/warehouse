@@ -15,7 +15,16 @@ public class AppExceptionHandler {
     @ResponseBody
     public Response handleResourceNotFound(ResourceNotFoundException e) {
         Response response = new Response();
-        response.setMessage(HttpStatus.NOT_FOUND.name());
+        response.setMessage(e.getMessage());
         return response;
     }
+
+//    @ExceptionHandler(RuntimeException.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    @ResponseBody
+//    public Response handle(RuntimeException e) {
+//        Response response = new Response();
+//        response.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.name());
+//        return response;
+//    }
 }

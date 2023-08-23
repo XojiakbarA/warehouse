@@ -5,6 +5,7 @@ import com.example.warehouse.entity.Supplier;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.SupplierRepository;
 import com.example.warehouse.service.SupplierService;
+import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,11 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier findById(Long id) {
-        return supplierRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        java.util.function.Supplier<ResourceNotFoundException> supplier = () -> {
+            String message = Message.createNotFound(Supplier.class.getSimpleName(), id);
+            return new ResourceNotFoundException(message);
+        };
+        return supplierRepository.findById(id).orElseThrow(supplier);
     }
 
     @Override

@@ -5,10 +5,13 @@ import com.example.warehouse.entity.Currency;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.CurrencyRepository;
 import com.example.warehouse.service.CurrencyService;
+import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.function.Supplier;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
@@ -23,7 +26,11 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public Currency findById(Long id) {
-        return currencyRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Supplier<ResourceNotFoundException> supplier = () -> {
+            String message = Message.createNotFound(Currency.class.getSimpleName(), id);
+            return new ResourceNotFoundException(message);
+        };
+        return currencyRepository.findById(id).orElseThrow(supplier);
     }
 
     @Override

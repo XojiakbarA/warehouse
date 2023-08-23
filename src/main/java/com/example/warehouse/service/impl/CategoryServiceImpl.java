@@ -5,10 +5,13 @@ import com.example.warehouse.entity.Category;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.CategoryRepository;
 import com.example.warehouse.service.CategoryService;
+import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.function.Supplier;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -23,7 +26,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        Supplier<ResourceNotFoundException> supplier = () -> {
+            String message = Message.createNotFound(Category.class.getSimpleName(), id);
+            return new ResourceNotFoundException(message);
+        };
+        return categoryRepository.findById(id).orElseThrow(supplier);
     }
 
     @Override
