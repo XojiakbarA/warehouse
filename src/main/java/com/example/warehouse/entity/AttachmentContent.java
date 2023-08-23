@@ -16,6 +16,6 @@ public class AttachmentContent {
 
     private byte[] bytes;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private Attachment attachment;
 }

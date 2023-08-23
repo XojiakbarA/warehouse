@@ -18,7 +18,7 @@ public class Attachment {
     private String name;
 
     @Column(nullable = false)
-    private int size;
+    private long size;
 
     @Column(nullable = false)
     private String contentType;
