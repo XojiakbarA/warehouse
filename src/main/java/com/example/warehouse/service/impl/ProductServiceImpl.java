@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
             String message = Message.createNotFound(Product.class.getSimpleName(), id);
             return new ResourceNotFoundException(message);
         };
-        return productRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return productRepository.findById(id).orElseThrow(supplier);
     }
 
     @Override
