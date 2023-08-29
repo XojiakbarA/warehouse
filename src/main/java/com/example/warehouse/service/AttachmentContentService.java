@@ -7,7 +7,7 @@ public interface AttachmentContentService {
     AttachmentContent findByAttachmentId(Long attachmentId);
     AttachmentContent save(AttachmentContent attachmentContent);
 
-    void deleteById(Long id);
+    void deleteByAttachmentId(Long id);
 
     void setAttributes(Attachment attachment, byte[] bytes, AttachmentContent attachmentContent);
 }

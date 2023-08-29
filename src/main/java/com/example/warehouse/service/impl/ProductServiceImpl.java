@@ -55,10 +55,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteById(Long id) {
-        Product product = findById(id);
-        Attachment attachment = product.getPhoto();
-        AttachmentContent attachmentContent = attachmentContentService.findByAttachmentId(attachment.getId());
-        attachmentContentService.deleteById(attachmentContent.getId());
         productRepository.deleteById(id);
     }
 

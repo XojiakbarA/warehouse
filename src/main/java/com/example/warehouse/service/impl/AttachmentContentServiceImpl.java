@@ -32,8 +32,8 @@ public class AttachmentContentServiceImpl implements AttachmentContentService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        attachmentContentRepository.deleteById(id);
+    public void deleteByAttachmentId(Long id) {
+        attachmentContentRepository.deleteByAttachmentId(id);
     }
 
     @Override
