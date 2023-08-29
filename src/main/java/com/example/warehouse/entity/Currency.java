@@ -1,11 +1,18 @@
 package com.example.warehouse.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity(name = "currencies")
-public class Currency extends BaseEntity {
+public class Currency {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private java.util.Currency currencyCode;
+
+    @Column(nullable = false)
+    private Boolean active = true;
 }

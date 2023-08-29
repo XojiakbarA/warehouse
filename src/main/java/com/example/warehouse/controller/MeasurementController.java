@@ -4,9 +4,10 @@ import com.example.warehouse.dto.MeasurementDTO;
 import com.example.warehouse.dto.Response;
 import com.example.warehouse.entity.Measurement;
 import com.example.warehouse.service.MeasurementService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,10 @@ public class MeasurementController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Response getAll(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+    public Response getAll() {
         Response response = new Response();
 
-        Page<Measurement> measurements = measurementService.findAll(PageRequest.of(page, size));
+        List<Measurement> measurements = measurementService.findAll();
 
         response.setData(measurements);
         response.setMessage(HttpStatus.OK.name());

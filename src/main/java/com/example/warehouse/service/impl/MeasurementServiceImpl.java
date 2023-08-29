@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @Service
@@ -22,6 +23,11 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Override
     public Page<Measurement> findAll(Pageable pageable) {
         return measurementRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Measurement> findAll() {
+        return measurementRepository.findAll();
     }
 
     @Override

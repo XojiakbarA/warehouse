@@ -68,11 +68,17 @@ public class DataLoader implements CommandLineRunner {
         }
     }
     private void createCurrencies() {
-        for (int i = 1; i <= 3; i++) {
-            Currency currency = new Currency();
-            currency.setName("Currency" + i);
-            currencyService.save(currency);
-        }
+        Currency currency1 = new Currency();
+        currency1.setCurrencyCode(java.util.Currency.getInstance("UZS"));
+
+        Currency currency2 = new Currency();
+        currency2.setCurrencyCode(java.util.Currency.getInstance("RUB"));
+
+        Currency currency3 = new Currency();
+        currency3.setCurrencyCode(java.util.Currency.getInstance("USD"));
+        currencyService.save(currency1);
+        currencyService.save(currency2);
+        currencyService.save(currency3);
     }
     private void createMeasurements() {
         for (int i = 1; i <= 5; i++) {
