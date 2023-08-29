@@ -61,7 +61,7 @@ public class DataLoader implements CommandLineRunner {
             for (int k = 1; k <= 7; k++) {
                 Random random = new Random();
                 Category category = new Category();
-                category.setName("SubCategory" + k + k);
+                category.setName("SubCategory" + j + k);
                 category.setParentCategory(categoryService.findById(random.nextLong(5 - 1) + 1));
                 categoryService.save(category);
             }
@@ -88,7 +88,7 @@ public class DataLoader implements CommandLineRunner {
                 Product product = new Product();
                 product.setCategory(categoryService.findById(random.nextLong(40 - 6) + 6));
                 product.setMeasurement(measurementService.findById(random.nextLong(5 - 1) + 1));
-                product.setName("Product" + j);
+                product.setName("Product" + i + j);
                 product.setCode(UUID.randomUUID().toString());
                 productService.save(product);
             }
