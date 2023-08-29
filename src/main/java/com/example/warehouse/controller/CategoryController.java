@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
@@ -37,6 +39,18 @@ public class CategoryController {
         Category category = categoryService.findById(id);
 
         response.setData(category);
+        response.setMessage(HttpStatus.OK.name());
+        return response;
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Response searchByName(@RequestParam(name = "name") String name) {
+        Response response = new Response();
+
+        List<Category> categories = categoryService.findAllByNameContainingIgnoreCase(name);
+
+        response.setData(categories);
         response.setMessage(HttpStatus.OK.name());
         return response;
     }
