@@ -55,6 +55,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteById(Long id) {
+        Product product = findById(id);
+        if (product.getPhoto() != null) {
+            attachmentContentService.deleteByAttachmentId(product.getPhoto().getId());
+        }
         productRepository.deleteById(id);
     }
 
@@ -75,23 +79,17 @@ public class ProductServiceImpl implements ProductService {
             product.setMeasurement(measurement);
         }
         if (dto.getPhoto() != null) {
+            if (product.getPhoto() != null) {
+                attachmentContentService.deleteByAttachmentId(product.getPhoto().getId());
+            }
+
             MultipartFile file = dto.getPhoto();
 
             Attachment attachment = new Attachment();
 
             attachmentService.setAttributes(file, attachment);
 
-            AttachmentContent attachmentContent = new AttachmentContent();
-
-            try {
-                attachmentContentService.setAttributes(attachment, file.getBytes(), attachmentContent);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            AttachmentContent savedAttachmentContent = attachmentContentService.save(attachmentContent);
-
-            product.setPhoto(savedAttachmentContent.getAttachment());
+            product.setPhoto(attachment);
         }
 
         product.setCode(UUID.randomUUID().toString());

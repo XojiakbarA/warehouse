@@ -18,7 +18,6 @@ public class AttachmentContent {
 
     private byte[] bytes;
 
-    @OneToOne(optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private Attachment attachment;
 }

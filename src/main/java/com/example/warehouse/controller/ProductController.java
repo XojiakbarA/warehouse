@@ -2,7 +2,9 @@ package com.example.warehouse.controller;
 
 import com.example.warehouse.dto.ProductDTO;
 import com.example.warehouse.dto.Response;
+import com.example.warehouse.entity.AttachmentContent;
 import com.example.warehouse.entity.Product;
+import com.example.warehouse.service.AttachmentContentService;
 import com.example.warehouse.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,12 +13,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private AttachmentContentService attachmentContentService;
 
     @GetMapping
     public Response getAll(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
@@ -53,6 +59,18 @@ public class ProductController {
 
         Product savedProduct = productService.save(product);
 
+        if (dto.getPhoto() != null) {
+            AttachmentContent attachmentContent = new AttachmentContent();
+
+            try {
+                attachmentContentService.setAttributes(savedProduct.getPhoto(), dto.getPhoto().getBytes(), attachmentContent);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            attachmentContentService.save(attachmentContent);
+        }
+
         response.setData(savedProduct);
         response.setMessage(HttpStatus.CREATED.name());
         return response;
@@ -69,6 +87,18 @@ public class ProductController {
         productService.setAttributes(dto, product);
 
         Product savedProduct = productService.save(product);
+
+        if (dto.getPhoto() != null) {
+            AttachmentContent attachmentContent = new AttachmentContent();
+
+            try {
+                attachmentContentService.setAttributes(savedProduct.getPhoto(), dto.getPhoto().getBytes(), attachmentContent);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            attachmentContentService.save(attachmentContent);
+        }
 
         response.setData(savedProduct);
         response.setMessage(HttpStatus.OK.name());
