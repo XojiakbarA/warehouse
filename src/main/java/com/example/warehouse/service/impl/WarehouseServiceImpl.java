@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @Service
@@ -30,6 +31,11 @@ public class WarehouseServiceImpl implements WarehouseService {
             return new ResourceNotFoundException(message);
         };
         return warehouseRepository.findById(id).orElseThrow(supplier);
+    }
+
+    @Override
+    public List<Warehouse> findAllByNameContainingIgnoreCase(String name) {
+        return warehouseRepository.findAllByNameContainingIgnoreCase(name);
     }
 
     @Override

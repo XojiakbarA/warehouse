@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/warehouses")
@@ -38,6 +40,18 @@ public class WarehouseController {
         Warehouse warehouse = warehouseService.findById(id);
 
         response.setData(warehouse);
+        response.setMessage(HttpStatus.OK.name());
+        return response;
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Response searchByName(@RequestParam(name = "name") String name) {
+        Response response = new Response();
+
+        List<Warehouse> warehouses = warehouseService.findAllByNameContainingIgnoreCase(name);
+
+        response.setData(warehouses);
         response.setMessage(HttpStatus.OK.name());
         return response;
     }
