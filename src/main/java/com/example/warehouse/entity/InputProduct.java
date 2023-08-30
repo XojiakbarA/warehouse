@@ -32,5 +32,6 @@ public class InputProduct {
     private Date expireDate;
 
     @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Input input;
 }
