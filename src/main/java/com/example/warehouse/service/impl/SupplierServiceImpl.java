@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SupplierServiceImpl implements SupplierService {
 
@@ -29,6 +31,11 @@ public class SupplierServiceImpl implements SupplierService {
             return new ResourceNotFoundException(message);
         };
         return supplierRepository.findById(id).orElseThrow(supplier);
+    }
+
+    @Override
+    public List<Supplier> findAllByNameContainingIgnoreCase(String name) {
+        return supplierRepository.findAllByNameContainingIgnoreCase(name);
     }
 
     @Override

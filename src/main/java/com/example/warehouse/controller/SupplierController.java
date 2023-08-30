@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/suppliers")
 public class SupplierController {
@@ -37,6 +39,18 @@ public class SupplierController {
         Supplier supplier = supplierService.findById(id);
 
         response.setData(supplier);
+        response.setMessage(HttpStatus.OK.name());
+        return response;
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Response searchByName(@RequestParam(name = "name") String name) {
+        Response response = new Response();
+
+        List<Supplier> suppliers = supplierService.findAllByNameContainingIgnoreCase(name);
+
+        response.setData(suppliers);
         response.setMessage(HttpStatus.OK.name());
         return response;
     }
