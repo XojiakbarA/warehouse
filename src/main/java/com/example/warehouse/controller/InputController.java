@@ -77,12 +77,14 @@ public class InputController {
 
         Input savedInput = inputService.save(input);
 
-        for (InputProductInnerDTO inputProductDTO : dto.getInputProducts()) {
-            InputProduct inputProduct = new InputProduct();
+        if (dto.getInputProducts() != null) {
+            for (InputProductInnerDTO inputProductDTO : dto.getInputProducts()) {
+                InputProduct inputProduct = new InputProduct();
 
-            inputProductService.setAttributes(inputProductDTO, inputProduct, savedInput);
+                inputProductService.setAttributes(inputProductDTO, inputProduct, savedInput);
 
-            inputProductService.save(inputProduct);
+                inputProductService.save(inputProduct);
+            }
         }
 
         response.setData(savedInput);
