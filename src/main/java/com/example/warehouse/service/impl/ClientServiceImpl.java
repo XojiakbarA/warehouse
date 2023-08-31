@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @Service
@@ -31,6 +32,11 @@ public class ClientServiceImpl implements ClientService {
             return new ResourceNotFoundException(message);
         };
         return clientRepository.findById(id).orElseThrow(supplier);
+    }
+
+    @Override
+    public List<Client> findAllByNameContainingIgnoreCase(String name) {
+        return clientRepository.findAllByNameContainingIgnoreCase(name);
     }
 
     @Override

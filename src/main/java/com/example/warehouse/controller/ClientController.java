@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
@@ -37,6 +39,18 @@ public class ClientController {
         Client client = clientService.findById(id);
 
         response.setData(client);
+        response.setMessage(HttpStatus.OK.name());
+        return response;
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Response searchByName(@RequestParam(name = "name") String name) {
+        Response response = new Response();
+
+        List<Client> clients = clientService.findAllByNameContainingIgnoreCase(name);
+
+        response.setData(clients);
         response.setMessage(HttpStatus.OK.name());
         return response;
     }
