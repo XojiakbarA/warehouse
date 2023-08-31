@@ -21,5 +21,6 @@ public class Product extends BaseEntity {
     private String code;
 
     @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Measurement measurement;
 }

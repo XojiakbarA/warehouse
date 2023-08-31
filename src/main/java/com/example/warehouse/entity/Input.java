@@ -30,6 +30,7 @@ public class Input {
     private Supplier supplier;
 
     @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Currency currency;
 
     @Column(nullable = false)

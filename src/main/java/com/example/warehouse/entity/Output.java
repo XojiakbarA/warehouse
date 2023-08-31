@@ -30,6 +30,7 @@ public class Output {
     private Client client;
 
     @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Currency currency;
 
     @Column(nullable = false)
