@@ -1,10 +1,13 @@
 package com.example.warehouse.service;
 
 import com.example.warehouse.dto.OutputProductInnerDTO;
+import com.example.warehouse.dto.dashboard.MostOutputProductsDTO;
 import com.example.warehouse.entity.Output;
 import com.example.warehouse.entity.OutputProduct;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface OutputProductService {
     Page<OutputProduct> findAll(Pageable pageable);
@@ -14,4 +17,6 @@ public interface OutputProductService {
     void deleteById(Long id);
     void deleteAllByOutputId(Long outputId);
     void setAttributes(OutputProductInnerDTO dto, OutputProduct outputProduct, Output output);
+
+    List<MostOutputProductsDTO> findDailyMostOutputProducts();
 }

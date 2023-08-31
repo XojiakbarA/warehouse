@@ -1,6 +1,7 @@
 package com.example.warehouse.service.impl;
 
 import com.example.warehouse.dto.OutputProductInnerDTO;
+import com.example.warehouse.dto.dashboard.MostOutputProductsDTO;
 import com.example.warehouse.entity.Output;
 import com.example.warehouse.entity.OutputProduct;
 import com.example.warehouse.entity.Product;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @Service
@@ -73,5 +75,10 @@ public class OutputProductServiceImpl implements OutputProductService {
         if (output != null) {
             outputProduct.setOutput(output);
         }
+    }
+
+    @Override
+    public List<MostOutputProductsDTO> findDailyMostOutputProducts() {
+        return outputProductRepository.findDailyMostOutputProducts();
     }
 }

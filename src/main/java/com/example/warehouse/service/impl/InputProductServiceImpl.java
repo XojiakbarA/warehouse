@@ -1,6 +1,8 @@
 package com.example.warehouse.service.impl;
 
 import com.example.warehouse.dto.InputProductInnerDTO;
+import com.example.warehouse.dto.dashboard.TotalAmountDTO;
+import com.example.warehouse.dto.dashboard.TotalCostDTO;
 import com.example.warehouse.entity.Input;
 import com.example.warehouse.entity.InputProduct;
 import com.example.warehouse.entity.Product;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @Service
@@ -76,5 +79,15 @@ public class InputProductServiceImpl implements InputProductService {
         if (input != null) {
             inputProduct.setInput(input);
         }
+    }
+
+    @Override
+    public List<TotalCostDTO> findDailyInputTotalCost() {
+        return inputProductRepository.findDailyInputTotalCost();
+    }
+
+    @Override
+    public List<TotalAmountDTO> findDailyInputTotalAmount() {
+        return inputProductRepository.findDailyInputTotalAmount();
     }
 }
