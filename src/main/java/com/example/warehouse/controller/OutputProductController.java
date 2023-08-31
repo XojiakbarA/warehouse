@@ -36,6 +36,7 @@ public class OutputProductController {
     }
 
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Response get(@PathVariable Long id) {
         Response response = new Response();
 
@@ -47,6 +48,7 @@ public class OutputProductController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Response create(@RequestBody OutputProductDTO dto) {
         Response response = new Response();
 
@@ -59,7 +61,7 @@ public class OutputProductController {
         OutputProduct savedOutputProduct = outputProductService.save(outputProduct);
 
         response.setData(savedOutputProduct);
-        response.setMessage(HttpStatus.OK.name());
+        response.setMessage(HttpStatus.CREATED.name());
         return response;
     }
 
