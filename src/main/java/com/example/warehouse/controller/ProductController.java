@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -43,6 +44,18 @@ public class ProductController {
         Product product = productService.findById(id);
 
         response.setData(product);
+        response.setMessage(HttpStatus.OK.name());
+        return response;
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Response searchByName(@RequestParam(name = "name") String name) {
+        Response response = new Response();
+
+        List<Product> products = productService.findAllByNameContainingIgnoreCase(name);
+
+        response.setData(products);
         response.setMessage(HttpStatus.OK.name());
         return response;
     }

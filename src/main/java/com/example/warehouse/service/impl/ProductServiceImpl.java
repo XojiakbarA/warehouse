@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -46,6 +47,11 @@ public class ProductServiceImpl implements ProductService {
             return new ResourceNotFoundException(message);
         };
         return productRepository.findById(id).orElseThrow(supplier);
+    }
+
+    @Override
+    public List<Product> findAllByNameContainingIgnoreCase(String name) {
+        return productRepository.findAllByNameContainingIgnoreCase(name);
     }
 
     @Override
