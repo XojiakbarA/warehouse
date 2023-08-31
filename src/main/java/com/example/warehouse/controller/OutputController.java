@@ -74,12 +74,14 @@ public class OutputController {
 
         Output savedOutput = outputService.save(output);
 
-        for (OutputProductInnerDTO outputProductDTO : dto.getOutputProducts()) {
-            OutputProduct outputProduct = new OutputProduct();
+        if (dto.getOutputProducts() != null) {
+            for (OutputProductInnerDTO outputProductDTO : dto.getOutputProducts()) {
+                OutputProduct outputProduct = new OutputProduct();
 
-            outputProductService.setAttributes(outputProductDTO, outputProduct, savedOutput);
+                outputProductService.setAttributes(outputProductDTO, outputProduct, savedOutput);
 
-            outputProductService.save(outputProduct);
+                outputProductService.save(outputProduct);
+            }
         }
 
         response.setData(output);
