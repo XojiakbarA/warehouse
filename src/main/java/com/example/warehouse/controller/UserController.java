@@ -1,33 +1,33 @@
 package com.example.warehouse.controller;
 
 import com.example.warehouse.dto.Response;
-import com.example.warehouse.dto.WarehouseDTO;
-import com.example.warehouse.entity.Warehouse;
-import com.example.warehouse.service.WarehouseService;
+import com.example.warehouse.dto.UserDTO;
+import com.example.warehouse.dto.UserViewDTO;
+import com.example.warehouse.entity.User;
+import com.example.warehouse.service.UserService;
+import com.example.warehouse.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-
 @RestController
-@RequestMapping("/warehouses")
-public class WarehouseController {
-
+@RequestMapping("/users")
+public class UserController {
     @Autowired
-    private WarehouseService warehouseService;
+    private UserService userService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Response getAll(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         Response response = new Response();
 
-        Page<Warehouse> warehouses = warehouseService.findAll(PageRequest.of(page, size));
+        Page<User> userPage = userService.findAll(PageRequest.of(page, size));
 
-        response.setData(warehouses);
+        Page<UserViewDTO> users = userPage.map(Mapper::userEntityToUserViewDTO);
+
+        response.setData(users);
         response.setMessage(HttpStatus.OK.name());
         return response;
     }
@@ -37,53 +37,41 @@ public class WarehouseController {
     public Response getById(@PathVariable Long id) {
         Response response = new Response();
 
-        Warehouse warehouse = warehouseService.findById(id);
+        UserViewDTO user = Mapper.userEntityToUserViewDTO(userService.findById(id));
 
-        response.setData(warehouse);
-        response.setMessage(HttpStatus.OK.name());
-        return response;
-    }
-
-    @GetMapping("/search")
-    @ResponseStatus(HttpStatus.OK)
-    public Response searchByName(@RequestParam(name = "name") String name) {
-        Response response = new Response();
-
-        List<Warehouse> warehouses = warehouseService.findAllByNameContainingIgnoreCase(name);
-
-        response.setData(warehouses);
+        response.setData(user);
         response.setMessage(HttpStatus.OK.name());
         return response;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Response create(@RequestBody WarehouseDTO dto) {
+    public Response create(@RequestBody UserDTO dto) {
         Response response = new Response();
 
-        Warehouse warehouse = new Warehouse();
+        User user = new User();
 
-        warehouseService.setAttributes(dto, warehouse);
+        userService.setAttributes(dto, user);
 
-        Warehouse savedWarehouse = warehouseService.save(warehouse);
+        UserViewDTO savedUser = Mapper.userEntityToUserViewDTO(userService.save(user));
 
-        response.setData(savedWarehouse);
+        response.setData(savedUser);
         response.setMessage(HttpStatus.CREATED.name());
         return response;
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response update(@RequestBody WarehouseDTO dto, @PathVariable Long id) {
+    public Response update(@RequestBody UserDTO dto, @PathVariable Long id) {
         Response response = new Response();
 
-        Warehouse warehouse = warehouseService.findById(id);
+        User user = userService.findById(id);
 
-        warehouseService.setAttributes(dto, warehouse);
+        userService.setAttributes(dto, user);
 
-        Warehouse warehouseDB = warehouseService.save(warehouse);
+        UserViewDTO savedUser = Mapper.userEntityToUserViewDTO(userService.save(user));
 
-        response.setData(warehouseDB);
+        response.setData(savedUser);
         response.setMessage(HttpStatus.OK.name());
         return response;
     }
@@ -93,7 +81,7 @@ public class WarehouseController {
     public Response delete(@PathVariable Long id) {
         Response response = new Response();
 
-        warehouseService.deleteById(id);
+        userService.deleteById(id);
 
         response.setMessage(HttpStatus.ACCEPTED.name());
         return response;

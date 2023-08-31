@@ -1,15 +1,14 @@
 package com.example.warehouse;
 
 import com.example.warehouse.entity.*;
+import com.example.warehouse.entity.Currency;
 import com.example.warehouse.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -36,6 +35,8 @@ public class DataLoader implements CommandLineRunner {
     private OutputService outputService;
     @Autowired
     private OutputProductService outputProductService;
+    @Autowired
+    private UserService userService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -48,6 +49,7 @@ public class DataLoader implements CommandLineRunner {
         createClients();
         createInputs();
         createOutputs();
+        createUsers();
     }
     private void createWarehouses() {
         for (int i = 1; i <= 10; i++) {
@@ -146,7 +148,6 @@ public class DataLoader implements CommandLineRunner {
             }
         }
     }
-
     private void createOutputs() {
         for (int i = 1; i <= 50; i++) {
             Random random = new Random();
@@ -169,6 +170,19 @@ public class DataLoader implements CommandLineRunner {
                 outputProduct.setPrice(random.nextDouble(1000 - 10) + 10);
                 outputProductService.save(outputProduct);
             }
+        }
+    }
+    private void createUsers() {
+        for (int i = 1; i <= 20; i++) {
+            Random random = new Random();
+            User user = new User();
+            user.setFirstName("username" + i);
+            user.setLastName("lastname" + i);
+            user.setPhoneNumber(String.valueOf(100000000 + new Random().nextInt(900000000)));
+            user.setPassword(Base64.getEncoder().encodeToString("123".getBytes()));
+            user.setCode(UUID.randomUUID().toString());
+            user.setWarehouses(Set.of(warehouseService.findById(random.nextLong(10 - 1) + 1)));
+            userService.save(user);
         }
     }
 }

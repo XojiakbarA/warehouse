@@ -28,11 +28,11 @@ public class User {
     @Column(nullable = false, unique = true)
     private String code;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-    private boolean active = true;
+    private Boolean active = true;
 
     @ManyToMany
     private Set<Warehouse> warehouses;
