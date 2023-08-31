@@ -27,5 +27,6 @@ public class OutputProduct {
     private Double price;
 
     @ManyToOne(optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Output output;
 }
