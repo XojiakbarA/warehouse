@@ -32,6 +32,10 @@ public class DataLoader implements CommandLineRunner {
     private InputService inputService;
     @Autowired
     private InputProductService inputProductService;
+    @Autowired
+    private OutputService outputService;
+    @Autowired
+    private OutputProductService outputProductService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -43,6 +47,7 @@ public class DataLoader implements CommandLineRunner {
         createSuppliers();
         createClients();
         createInputs();
+        createOutputs();
     }
     private void createWarehouses() {
         for (int i = 1; i <= 10; i++) {
@@ -138,6 +143,31 @@ public class DataLoader implements CommandLineRunner {
                 inputProduct.setPrice(random.nextDouble(1000 - 10) + 10);
                 inputProduct.setExpireDate(new Date());
                 inputProductService.save(inputProduct);
+            }
+        }
+    }
+
+    private void createOutputs() {
+        for (int i = 1; i <= 50; i++) {
+            Random random = new Random();
+            Output output = new Output();
+            output.setWarehouse(warehouseService.findById(random.nextLong(10 - 1) + 1));
+            output.setCurrency(currencyService.findById(random.nextLong(3 - 1) + 1));
+            output.setClient(clientService.findById(random.nextLong(15 - 1) + 1));
+            output.setDate(new Timestamp(new Date().getTime()));
+            output.setCode(UUID.randomUUID().toString());
+            output.setFactureNumber(random.nextInt(900000 - 100000) + 100000);
+            outputService.save(output);
+        }
+        for (int i = 1; i <= 50; i++) {
+            for (int j = 1; j <= 15; j++) {
+                Random random = new Random();
+                OutputProduct outputProduct = new OutputProduct();
+                outputProduct.setOutput(outputService.findById(random.nextLong(50 - 1) + 1));
+                outputProduct.setProduct(productService.findById(random.nextLong(350 - 1) + 1));
+                outputProduct.setAmount(random.nextDouble(20 - 1) + 1);
+                outputProduct.setPrice(random.nextDouble(1000 - 10) + 10);
+                outputProductService.save(outputProduct);
             }
         }
     }
