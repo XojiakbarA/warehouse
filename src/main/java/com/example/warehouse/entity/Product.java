@@ -3,6 +3,7 @@ package com.example.warehouse.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -23,4 +24,7 @@ public class Product extends BaseEntity {
     @ManyToOne(optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Measurement measurement;
+
+    @Formula("(select coalesce(sum(ip.amount), 0) from input_products ip where ip.product_id=id) - (select coalesce(sum(op.amount), 0) from output_products op where op.product_id=id)")
+    private Double remaining;
 }
