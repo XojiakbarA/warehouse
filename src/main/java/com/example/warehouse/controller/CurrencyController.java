@@ -21,6 +21,8 @@ public class CurrencyController {
 
     @Autowired
     private CurrencyService currencyService;
+    @Autowired
+    private Mapper mapper;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -29,7 +31,7 @@ public class CurrencyController {
 
         List<Currency> currencyList = currencyService.findAll();
 
-        List<CurrencyViewDTO> currencies = currencyList.stream().map(Mapper::currencyEntityToCurrencyViewDTO).toList();
+        List<CurrencyViewDTO> currencies = currencyList.stream().map(c -> mapper.currencyEntityToCurrencyViewDTO(c)).toList();
 
         response.setData(currencies);
         response.setMessage(HttpStatus.OK.name());
@@ -43,7 +45,7 @@ public class CurrencyController {
 
         Set<java.util.Currency> currencySet = currencyService.findAvailableCurrency(name);
 
-        Set<CurrencyAvailableDTO> currencies = currencySet.stream().map(Mapper::currencyUtilToCurrencyAvailableDTO).collect(Collectors.toSet());
+        Set<CurrencyAvailableDTO> currencies = currencySet.stream().map(c -> mapper.currencyUtilToCurrencyAvailableDTO(c)).collect(Collectors.toSet());
 
         response.setData(currencies);
         response.setMessage(HttpStatus.OK.name());
@@ -57,7 +59,7 @@ public class CurrencyController {
 
         Currency currencyDB = currencyService.findById(id);
 
-        CurrencyViewDTO currency = Mapper.currencyEntityToCurrencyViewDTO(currencyDB);
+        CurrencyViewDTO currency = mapper.currencyEntityToCurrencyViewDTO(currencyDB);
 
         response.setData(currency);
         response.setMessage(HttpStatus.OK.name());
@@ -75,7 +77,7 @@ public class CurrencyController {
 
         Currency savedCurrency = currencyService.save(newCurrency);
 
-        CurrencyViewDTO currency = Mapper.currencyEntityToCurrencyViewDTO(savedCurrency);
+        CurrencyViewDTO currency = mapper.currencyEntityToCurrencyViewDTO(savedCurrency);
 
         response.setData(currency);
         response.setMessage(HttpStatus.CREATED.name());
@@ -93,7 +95,7 @@ public class CurrencyController {
 
         Currency savedCurrency = currencyService.save(currencyDB);
 
-        CurrencyViewDTO currency = Mapper.currencyEntityToCurrencyViewDTO(savedCurrency);
+        CurrencyViewDTO currency = mapper.currencyEntityToCurrencyViewDTO(savedCurrency);
 
         response.setData(currency);
         response.setMessage(HttpStatus.OK.name());

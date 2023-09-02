@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private Mapper mapper;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -25,7 +27,7 @@ public class UserController {
 
         Page<User> userPage = userService.findAll(PageRequest.of(page, size));
 
-        Page<UserViewDTO> users = userPage.map(Mapper::userEntityToUserViewDTO);
+        Page<UserViewDTO> users = userPage.map(u -> mapper.userEntityToUserViewDTO(u));
 
         response.setData(users);
         response.setMessage(HttpStatus.OK.name());
@@ -37,7 +39,7 @@ public class UserController {
     public Response getById(@PathVariable Long id) {
         Response response = new Response();
 
-        UserViewDTO user = Mapper.userEntityToUserViewDTO(userService.findById(id));
+        UserViewDTO user = mapper.userEntityToUserViewDTO(userService.findById(id));
 
         response.setData(user);
         response.setMessage(HttpStatus.OK.name());
@@ -53,7 +55,7 @@ public class UserController {
 
         userService.setAttributes(dto, user);
 
-        UserViewDTO savedUser = Mapper.userEntityToUserViewDTO(userService.save(user));
+        UserViewDTO savedUser = mapper.userEntityToUserViewDTO(userService.save(user));
 
         response.setData(savedUser);
         response.setMessage(HttpStatus.CREATED.name());
@@ -69,7 +71,7 @@ public class UserController {
 
         userService.setAttributes(dto, user);
 
-        UserViewDTO savedUser = Mapper.userEntityToUserViewDTO(userService.save(user));
+        UserViewDTO savedUser = mapper.userEntityToUserViewDTO(userService.save(user));
 
         response.setData(savedUser);
         response.setMessage(HttpStatus.OK.name());

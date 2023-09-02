@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Mapper {
-    public static CurrencyViewDTO currencyEntityToCurrencyViewDTO(Currency currency) {
+    public CurrencyViewDTO currencyEntityToCurrencyViewDTO(Currency currency) {
         CurrencyViewDTO dto = new CurrencyViewDTO();
         dto.setId(currency.getId());
         dto.setCurrencyCode(currency.getCurrencyCode());
@@ -17,13 +17,13 @@ public class Mapper {
         dto.setActive(currency.getActive());
         return dto;
     }
-    public static CurrencyAvailableDTO currencyUtilToCurrencyAvailableDTO(java.util.Currency currency) {
+    public CurrencyAvailableDTO currencyUtilToCurrencyAvailableDTO(java.util.Currency currency) {
         CurrencyAvailableDTO dto = new CurrencyAvailableDTO();
         dto.setCurrencyCode(currency.getCurrencyCode());
         dto.setCurrencyName(currency.getDisplayName());
         return dto;
     }
-    public static UserViewDTO userEntityToUserViewDTO(User user) {
+    public UserViewDTO userEntityToUserViewDTO(User user) {
         UserViewDTO dto = new UserViewDTO();
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
