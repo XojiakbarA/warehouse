@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface CategoryService {
+public interface CategoryService extends ActiveCheckable {
     Page<Category> findAll(Pageable pageable);
 
     Category findById(Long id);

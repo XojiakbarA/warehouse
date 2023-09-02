@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface ProductService {
+public interface ProductService extends ActiveCheckable {
     Page<Product> findAll(Pageable pageable);
 
     Product findById(Long id);

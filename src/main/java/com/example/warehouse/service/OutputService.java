@@ -5,7 +5,7 @@ import com.example.warehouse.entity.Output;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface OutputService {
+public interface OutputService extends ActiveCheckable {
     Page<Output> findAll(Pageable pageable);
 
     Output findById(Long id);

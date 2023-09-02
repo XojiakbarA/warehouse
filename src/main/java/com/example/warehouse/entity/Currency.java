@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity(name = "currencies")
-public class Currency {
+public class Currency implements Activable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

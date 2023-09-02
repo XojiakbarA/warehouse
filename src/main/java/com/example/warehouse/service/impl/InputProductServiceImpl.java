@@ -56,6 +56,7 @@ public class InputProductServiceImpl implements InputProductService {
     public void setAttributes(InputProductInnerDTO dto, InputProduct inputProduct, Input input) {
         if (dto.getProductId() != null) {
             Product product = productService.findById(dto.getProductId());
+            checkActive(product);
             inputProduct.setProduct(product);
         }
         if (dto.getAmount() != null) {

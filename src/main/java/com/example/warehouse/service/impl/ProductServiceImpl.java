@@ -73,10 +73,12 @@ public class ProductServiceImpl implements ProductService {
         }
         if (dto.getCategoryId() != null) {
             Category category = categoryService.findById(dto.getCategoryId());
+            checkActive(category);
             product.setCategory(category);
         }
         if (dto.getMeasurementId() != null) {
             Measurement measurement = measurementService.findById(dto.getMeasurementId());
+            checkActive(measurement);
             product.setMeasurement(measurement);
         }
         if (dto.getPhoto() != null) {

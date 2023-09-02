@@ -23,8 +23,6 @@ public class InputServiceImpl implements InputService {
     private SupplierService supplierService;
     @Autowired
     private CurrencyService currencyService;
-    @Autowired
-    private InputProductService inputProductService;
 
     @Override
     public Page<Input> findAll(Pageable pageable) {
@@ -52,14 +50,17 @@ public class InputServiceImpl implements InputService {
     public void setAttributes(InputUpdateDTO dto, Input input) {
         if (dto.getWarehouseId() != null) {
             Warehouse warehouse = warehouseService.findById(dto.getWarehouseId());
+            checkActive(warehouse);
             input.setWarehouse(warehouse);
         }
         if (dto.getSupplierId() != null) {
             Supplier supplier = supplierService.findById(dto.getSupplierId());
+            checkActive(supplier);
             input.setSupplier(supplier);
         }
         if (dto.getCurrencyId() != null) {
             Currency currency = currencyService.findById(dto.getCurrencyId());
+            checkActive(currency);
             input.setCurrency(currency);
         }
         if (dto.getDate() != null) {

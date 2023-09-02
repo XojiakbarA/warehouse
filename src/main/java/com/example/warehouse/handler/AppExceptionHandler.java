@@ -2,6 +2,7 @@ package com.example.warehouse.handler;
 
 import com.example.warehouse.dto.Response;
 import com.example.warehouse.exception.AmountExceedsException;
+import com.example.warehouse.exception.NotActiveException;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,10 +21,10 @@ public class AppExceptionHandler {
         return response;
     }
 
-    @ExceptionHandler(AmountExceedsException.class)
+    @ExceptionHandler({AmountExceedsException.class, NotActiveException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public Response handleAmountExceeds(AmountExceedsException e) {
+    public Response handleAmountExceeds(RuntimeException e) {
         Response response = new Response();
         response.setMessage(e.getMessage());
         return response;

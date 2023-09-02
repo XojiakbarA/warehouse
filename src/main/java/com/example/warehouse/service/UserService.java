@@ -5,7 +5,7 @@ import com.example.warehouse.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface UserService {
+public interface UserService extends ActiveCheckable {
     Page<User> findAll(Pageable pageable);
 
     User findById(Long id);

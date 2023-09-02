@@ -56,14 +56,17 @@ public class OutputServiceImpl implements OutputService {
     public void setAttributes(OutputUpdateDTO dto, Output output) {
         if (dto.getWarehouseId() != null) {
             Warehouse warehouse = warehouseService.findById(dto.getWarehouseId());
+            checkActive(warehouse);
             output.setWarehouse(warehouse);
         }
         if (dto.getClientId() != null) {
             Client client = clientService.findById(dto.getClientId());
+            checkActive(client);
             output.setClient(client);
         }
         if (dto.getCurrencyId() != null) {
             Currency currency = currencyService.findById(dto.getCurrencyId());
+            checkActive(currency);
             output.setCurrency(currency);
         }
         if (dto.getDate() != null) {

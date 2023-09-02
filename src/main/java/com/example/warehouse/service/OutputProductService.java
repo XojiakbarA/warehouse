@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface OutputProductService {
+public interface OutputProductService extends ActiveCheckable {
     Page<OutputProduct> findAll(Pageable pageable);
     Page<OutputProduct> findAllByOutputId(Long outputId, Pageable pageable);
     OutputProduct findById(Long id);

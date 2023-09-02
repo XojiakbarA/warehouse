@@ -49,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void setAttributes(CategoryDTO dto, Category category) {
         if (dto.getParentCategoryId() != null) {
             Category parentCategory = findById(dto.getParentCategoryId());
+            checkActive(parentCategory);
             category.setParentCategory(parentCategory);
         }
         if (dto.getName() != null) {

@@ -67,7 +67,12 @@ public class UserServiceImpl implements UserService {
         }
         if (dto.getWarehouseIds() != null) {
             Set<Warehouse> warehouses = dto.getWarehouseIds().stream()
-                    .map(id -> warehouseService.findById(id)).collect(Collectors.toSet());
+                    .map(id -> {
+                        Warehouse warehouse = warehouseService.findById(id);
+                        checkActive(warehouse);
+                        return warehouse;
+                    })
+                    .collect(Collectors.toSet());
             user.setWarehouses(warehouses);
         }
         user.setCode(UUID.randomUUID().toString());

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @MappedSuperclass
 @Data
-public class BaseEntity {
+public class BaseEntity implements Activable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

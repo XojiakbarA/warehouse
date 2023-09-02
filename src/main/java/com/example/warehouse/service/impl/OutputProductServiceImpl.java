@@ -57,7 +57,7 @@ public class OutputProductServiceImpl implements OutputProductService {
         if (dto.getProductId() != null) {
             Product product = productService.findById(dto.getProductId());
             outputProduct.setProduct(product);
-
+            checkActive(product);
             if (product.getRemaining() < dto.getAmount()) {
                 throw new AmountExceedsException(product.getRemaining());
             }
