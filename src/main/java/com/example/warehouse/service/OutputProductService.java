@@ -15,7 +15,6 @@ public interface OutputProductService {
     OutputProduct findById(Long id);
     OutputProduct save(OutputProduct outputProduct);
     void deleteById(Long id);
-    void deleteAllByOutputId(Long outputId);
     void setAttributes(OutputProductInnerDTO dto, OutputProduct outputProduct, Output output);
 
     List<MostOutputProductsDTO> findDailyMostOutputProducts();

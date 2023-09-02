@@ -53,11 +53,6 @@ public class InputProductServiceImpl implements InputProductService {
     }
 
     @Override
-    public void deleteAllByInputId(Long inputId) {
-        inputProductRepository.deleteAllByInputId(inputId);
-    }
-
-    @Override
     public void setAttributes(InputProductInnerDTO dto, InputProduct inputProduct, Input input) {
         if (dto.getProductId() != null) {
             Product product = productService.findById(dto.getProductId());

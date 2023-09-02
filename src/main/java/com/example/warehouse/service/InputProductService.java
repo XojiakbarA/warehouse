@@ -16,7 +16,6 @@ public interface InputProductService {
     InputProduct findById(Long id);
     InputProduct save(InputProduct inputProduct);
     void deleteById(Long id);
-    void deleteAllByInputId(Long inputId);
     void setAttributes(InputProductInnerDTO dto, InputProduct inputProduct, Input input);
 
     List<TotalCostDTO> findDailyInputTotalCost();

@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface InputProductRepository extends JpaRepository<InputProduct, Long> {
     Page<InputProduct> findAllByInputId(Long id, Pageable pageable);
-    void deleteAllByInputId(Long inputId);
+    InputProduct findByProductId(Long productId);
 
     @Query(nativeQuery = true)
     List<TotalCostDTO> findDailyInputTotalCost();

@@ -5,6 +5,7 @@ import com.example.warehouse.dto.dashboard.MostOutputProductsDTO;
 import com.example.warehouse.entity.Output;
 import com.example.warehouse.entity.OutputProduct;
 import com.example.warehouse.entity.Product;
+import com.example.warehouse.exception.AmountExceedsException;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.OutputProductRepository;
 import com.example.warehouse.service.OutputProductService;
@@ -52,15 +53,14 @@ public class OutputProductServiceImpl implements OutputProductService {
     }
 
     @Override
-    public void deleteAllByOutputId(Long outputId) {
-        outputProductRepository.deleteAllByOutputId(outputId);
-    }
-
-    @Override
     public void setAttributes(OutputProductInnerDTO dto, OutputProduct outputProduct, Output output) {
         if (dto.getProductId() != null) {
             Product product = productService.findById(dto.getProductId());
             outputProduct.setProduct(product);
+
+            if (product.getRemaining() < dto.getAmount()) {
+                throw new AmountExceedsException(product.getRemaining());
+            }
         }
         if (dto.getAmount() != null) {
             outputProduct.setAmount(dto.getAmount());

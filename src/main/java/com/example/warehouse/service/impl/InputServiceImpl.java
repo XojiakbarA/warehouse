@@ -45,7 +45,6 @@ public class InputServiceImpl implements InputService {
 
     @Override
     public void deleteById(Long id) {
-        inputProductService.deleteAllByInputId(id);
         inputRepository.deleteById(id);
     }
 
