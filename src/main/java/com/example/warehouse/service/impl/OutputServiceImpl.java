@@ -11,14 +11,12 @@ import com.example.warehouse.service.ClientService;
 import com.example.warehouse.service.CurrencyService;
 import com.example.warehouse.service.OutputService;
 import com.example.warehouse.service.WarehouseService;
-import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-import java.util.function.Supplier;
 
 @Service
 public class OutputServiceImpl implements OutputService {
@@ -39,11 +37,9 @@ public class OutputServiceImpl implements OutputService {
 
     @Override
     public Output findById(Long id) {
-        Supplier<ResourceNotFoundException> supplier = () -> {
-            String message = Message.createNotFound(Output.class.getSimpleName(), id);
-            return new ResourceNotFoundException(message);
-        };
-        return outputRepository.findById(id).orElseThrow(supplier);
+        return outputRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(Output.class.getSimpleName(), id)
+        );
     }
 
     @Override

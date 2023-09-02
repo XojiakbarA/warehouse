@@ -5,14 +5,12 @@ import com.example.warehouse.entity.Client;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.ClientRepository;
 import com.example.warehouse.service.ClientService;
-import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -27,11 +25,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client findById(Long id) {
-        Supplier<ResourceNotFoundException> supplier = () -> {
-            String message = Message.createNotFound(Client.class.getSimpleName(), id);
-            return new ResourceNotFoundException(message);
-        };
-        return clientRepository.findById(id).orElseThrow(supplier);
+        return clientRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(Client.class.getSimpleName(), id)
+        );
     }
 
     @Override

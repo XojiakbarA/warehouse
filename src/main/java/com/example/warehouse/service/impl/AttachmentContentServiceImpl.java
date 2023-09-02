@@ -5,11 +5,8 @@ import com.example.warehouse.entity.AttachmentContent;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.AttachmentContentRepository;
 import com.example.warehouse.service.AttachmentContentService;
-import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.function.Supplier;
 
 @Service
 public class AttachmentContentServiceImpl implements AttachmentContentService {
@@ -19,11 +16,9 @@ public class AttachmentContentServiceImpl implements AttachmentContentService {
 
     @Override
     public AttachmentContent findByAttachmentId(Long attachmentId) {
-        Supplier<ResourceNotFoundException> supplier = () -> {
-            String message = Message.createNotFound(AttachmentContent.class.getSimpleName(), attachmentId, "attachment_id");
-            return new ResourceNotFoundException(message);
-        };
-        return attachmentContentRepository.findByAttachmentId(attachmentId).orElseThrow(supplier);
+        return attachmentContentRepository.findByAttachmentId(attachmentId).orElseThrow(
+                () -> new ResourceNotFoundException(AttachmentContent.class.getSimpleName(), attachmentId, "attachment_id")
+        );
     }
 
     @Override

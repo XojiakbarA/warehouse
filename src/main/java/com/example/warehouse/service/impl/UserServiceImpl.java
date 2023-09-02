@@ -7,7 +7,6 @@ import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.UserRepository;
 import com.example.warehouse.service.UserService;
 import com.example.warehouse.service.WarehouseService;
-import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.Base64;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,11 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        Supplier<ResourceNotFoundException> supplier = () -> {
-            String message = Message.createNotFound(User.class.getSimpleName(), id);
-            return new ResourceNotFoundException(message);
-        };
-        return userRepository.findById(id).orElseThrow(supplier);
+        return userRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(User.class.getSimpleName(), id)
+        );
     }
 
     @Override

@@ -5,17 +5,14 @@ import com.example.warehouse.entity.*;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.ProductRepository;
 import com.example.warehouse.service.*;
-import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -42,11 +39,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product findById(Long id) {
-        Supplier<ResourceNotFoundException> supplier = () -> {
-            String message = Message.createNotFound(Product.class.getSimpleName(), id);
-            return new ResourceNotFoundException(message);
-        };
-        return productRepository.findById(id).orElseThrow(supplier);
+        return productRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(Product.class.getSimpleName(), id)
+        );
     }
 
     @Override

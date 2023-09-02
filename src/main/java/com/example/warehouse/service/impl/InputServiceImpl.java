@@ -5,7 +5,6 @@ import com.example.warehouse.entity.*;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.InputRepository;
 import com.example.warehouse.service.*;
-import com.example.warehouse.util.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,11 +33,9 @@ public class InputServiceImpl implements InputService {
 
     @Override
     public Input findById(Long id) {
-        java.util.function.Supplier<ResourceNotFoundException> supplier = () -> {
-            String message = Message.createNotFound(Input.class.getSimpleName(), id);
-            return new ResourceNotFoundException(message);
-        };
-        return inputRepository.findById(id).orElseThrow(supplier);
+        return inputRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(Input.class.getSimpleName(), id)
+        );
     }
 
     @Override
