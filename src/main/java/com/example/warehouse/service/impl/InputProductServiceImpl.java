@@ -41,6 +41,16 @@ public class InputProductServiceImpl implements InputProductService {
     }
 
     @Override
+    public List<InputProduct> findAllNearToExpire() {
+        return inputProductRepository.findAllNearToExpire();
+    }
+
+    @Override
+    public Long countNearToExpire() {
+        return inputProductRepository.countNearToExpire();
+    }
+
+    @Override
     public InputProduct findById(Long id) {
         return inputProductRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(InputProduct.class.getSimpleName(), id)

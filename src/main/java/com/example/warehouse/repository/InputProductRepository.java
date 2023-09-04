@@ -17,6 +17,10 @@ public interface InputProductRepository extends JpaRepository<InputProduct, Long
     List<InputProduct> findAllByProductNameContainingIgnoreCase(String productName);
 
     @Query(nativeQuery = true)
+    List<InputProduct> findAllNearToExpire();
+    @Query(value = "select count(ip.id) from input_products ip where (extract(epoch from ip.expire_date - now())/86400) < (select value from remind_before where selected=true) and (ip.amount - (select coalesce(sum(amount), 0) from output_products where input_product_id=ip.id)) > 0;", nativeQuery = true)
+    Long countNearToExpire();
+    @Query(nativeQuery = true)
     List<TotalCostDTO> findDailyInputTotalCost();
     @Query(nativeQuery = true)
     List<TotalAmountDTO> findDailyInputTotalAmount();

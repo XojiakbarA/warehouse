@@ -32,6 +32,20 @@ import java.util.Date;
                 targetClass = TotalAmountDTO.class,
                 columns = {@ColumnResult(name = "measurementName"), @ColumnResult(name = "sum")})
 )
+@NamedNativeQuery(
+        name = "InputProduct.findAllNearToExpire",
+        query = "select ip.id, ip.amount, ip.expire_date as expireDate, ip.price from input_products ip where (extract(epoch from ip.expire_date - now())/86400) < (select value from remind_before where selected=true) and (ip.amount - (select coalesce(sum(amount), 0) from output_products where input_product_id=ip.id)) > 0",
+        resultSetMapping = "Mapping.InputProduct")
+@SqlResultSetMapping(
+        name = "Mapping.InputProduct",
+        classes = @ConstructorResult(
+                targetClass = InputProduct.class,
+                columns = {
+                        @ColumnResult(name = "id"),
+                        @ColumnResult(name = "amount"), @ColumnResult(name = "price"),
+                        @ColumnResult(name = "expireDate")
+                })
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

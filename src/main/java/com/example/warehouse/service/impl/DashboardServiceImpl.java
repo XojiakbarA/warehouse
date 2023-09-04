@@ -4,6 +4,7 @@ import com.example.warehouse.dto.dashboard.DailyInputDTO;
 import com.example.warehouse.dto.dashboard.MostOutputProductsDTO;
 import com.example.warehouse.dto.dashboard.TotalAmountDTO;
 import com.example.warehouse.dto.dashboard.TotalCostDTO;
+import com.example.warehouse.entity.InputProduct;
 import com.example.warehouse.service.DashboardService;
 import com.example.warehouse.service.InputProductService;
 import com.example.warehouse.service.OutputProductService;
@@ -34,5 +35,15 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<MostOutputProductsDTO> getDailyMostOutputProducts() {
         return outputProductService.findDailyMostOutputProducts();
+    }
+
+    @Override
+    public List<InputProduct> getAllNearToExpireInputProducts() {
+        return inputProductService.findAllNearToExpire();
+    }
+
+    @Override
+    public Long getCountNearToExpireInputProducts() {
+        return inputProductService.countNearToExpire();
     }
 }
