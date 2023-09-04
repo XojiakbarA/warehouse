@@ -60,4 +60,7 @@ public class InputProduct {
 
     @Formula("(select (amount) - (select coalesce(sum(op.amount), 0) from output_products op where op.input_product_id=id))")
     private Double remaining;
+
+    @Formula("(select extract(epoch from expire_date - now()) / 86400)")
+    private Double nearToExpire;
 }

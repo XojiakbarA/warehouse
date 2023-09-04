@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
@@ -37,6 +38,8 @@ public class DataLoader implements CommandLineRunner {
     private OutputProductService outputProductService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RemindBeforeOptionService remindBeforeOptionService;
 
     private final Long warehouseMax = 5L;
     private final Long parentCategoryMax = 3L;
@@ -53,6 +56,20 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        RemindBeforeOption remindBeforeOption1 = new RemindBeforeOption();
+        remindBeforeOption1.setValue(15);
+        remindBeforeOption1.setSelected(true);
+        remindBeforeOptionService.save(remindBeforeOption1);
+
+        RemindBeforeOption remindBeforeOption2 = new RemindBeforeOption();
+        remindBeforeOption2.setValue(30);
+        remindBeforeOptionService.save(remindBeforeOption2);
+
+        RemindBeforeOption remindBeforeOption3 = new RemindBeforeOption();
+        remindBeforeOption3.setValue(60);
+        remindBeforeOptionService.save(remindBeforeOption3);
+
         createWarehouses();
         createUsers();
         createCategories();
@@ -169,7 +186,7 @@ public class DataLoader implements CommandLineRunner {
                 inputProduct.setProduct(productService.findById(random.nextLong(productMax * (categoryMax - subCategoryMin) - 1) + 1));
                 inputProduct.setAmount(random.nextDouble(inputAmountMax - 1) + 1);
                 inputProduct.setPrice(random.nextDouble(1000 - 10) + 10);
-                inputProduct.setExpireDate(new Date());
+                inputProduct.setExpireDate(Timestamp.valueOf(LocalDateTime.now().plusDays(20)));
                 inputProductService.save(inputProduct);
             }
         }
