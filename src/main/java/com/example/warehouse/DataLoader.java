@@ -38,9 +38,23 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private UserService userService;
 
+    private final Long warehouseMax = 5L;
+    private final Long parentCategoryMax = 3L;
+    private final Long subCategoryMax = 5L;
+    private final long categoryMax = (parentCategoryMax * subCategoryMax) + parentCategoryMax;
+    private final long subCategoryMin = parentCategoryMax + 1;
+    private final Long productMax = 5L;
+    private final Long supplierMax = 10L;
+    private final Long currencyMax = 3L;
+    private final Long measurementMax = 5L;
+    private final Long inputMax = 12L;
+    private final Long inputProductMax = 10L;
+    private final double inputAmountMax = 100;
+
     @Override
     public void run(String... args) throws Exception {
         createWarehouses();
+        createUsers();
         createCategories();
         createCurrencies();
         createMeasurements();
@@ -49,27 +63,39 @@ public class DataLoader implements CommandLineRunner {
         createClients();
         createInputs();
         createOutputs();
-        createUsers();
     }
     private void createWarehouses() {
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= warehouseMax; i++) {
             Warehouse warehouse = new Warehouse();
             warehouse.setName("Warehouse" + i);
             warehouseService.save(warehouse);
         }
     }
+    private void createUsers() {
+        for (int i = 1; i <= 15; i++) {
+            Random random = new Random();
+            User user = new User();
+            user.setFirstName("username" + i);
+            user.setLastName("lastname" + i);
+            user.setPhoneNumber(String.valueOf(100000000 + new Random().nextInt(900000000)));
+            user.setPassword(Base64.getEncoder().encodeToString("123".getBytes()));
+            user.setCode(UUID.randomUUID().toString());
+            user.setWarehouses(Set.of(warehouseService.findById(random.nextLong(warehouseMax - 1) + 1)));
+            userService.save(user);
+        }
+    }
     private void createCategories() {
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= parentCategoryMax; i++) {
             Category category = new Category();
             category.setName("Category" + i);
             categoryService.save(category);
         }
-        for (int j = 1; j <= 5; j++) {
-            for (int k = 1; k <= 7; k++) {
+        for (int j = 1; j <= parentCategoryMax; j++) {
+            for (int k = 1; k <= subCategoryMax; k++) {
                 Random random = new Random();
                 Category category = new Category();
                 category.setName("SubCategory" + j + k);
-                category.setParentCategory(categoryService.findById(random.nextLong(5 - 1) + 1));
+                category.setParentCategory(categoryService.findById(random.nextLong(parentCategoryMax - 1) + 1));
                 categoryService.save(category);
             }
         }
@@ -95,12 +121,12 @@ public class DataLoader implements CommandLineRunner {
         }
     }
     private void createProducts() {
-        for (int i = 6; i <= 40; i++) {
-            for (int j = 1; j <= 10; j++) {
+        for (int i = (int) subCategoryMin; i <= categoryMax; i++) {
+            for (int j = 1; j <= productMax; j++) {
                 Random random = new Random();
                 Product product = new Product();
-                product.setCategory(categoryService.findById(random.nextLong(40 - 6) + 6));
-                product.setMeasurement(measurementService.findById(random.nextLong(5 - 1) + 1));
+                product.setCategory(categoryService.findById(random.nextLong(categoryMax - subCategoryMin) + subCategoryMin));
+                product.setMeasurement(measurementService.findById(random.nextLong(measurementMax - 1) + 1));
                 product.setName("Product" + i + j);
                 product.setCode(UUID.randomUUID().toString());
                 productService.save(product);
@@ -108,7 +134,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
     private void createSuppliers() {
-        for (int i = 1; i <= 15; i++) {
+        for (int i = 1; i <= supplierMax; i++) {
             Supplier supplier = new Supplier();
             supplier.setName("Supplier" + i);
             supplier.setPhoneNumber(String.valueOf(100000000 + new Random().nextInt(900000000)));
@@ -116,7 +142,7 @@ public class DataLoader implements CommandLineRunner {
         }
     }
     private void createClients() {
-        for (int i = 1; i <= 15; i++) {
+        for (int i = 1; i <= supplierMax; i++) {
             Client client = new Client();
             client.setName("Client" + i);
             client.setPhoneNumber(String.valueOf(100000000 + new Random().nextInt(900000000)));
@@ -124,24 +150,24 @@ public class DataLoader implements CommandLineRunner {
         }
     }
     private void createInputs() {
-        for (int i = 1; i <= 50; i++) {
+        for (int i = 1; i <= inputMax; i++) {
             Random random = new Random();
             Input input = new Input();
-            input.setWarehouse(warehouseService.findById(random.nextLong(10 - 1) + 1));
-            input.setCurrency(currencyService.findById(random.nextLong(3 - 1) + 1));
-            input.setSupplier(supplierService.findById(random.nextLong(15 - 1) + 1));
+            input.setWarehouse(warehouseService.findById(random.nextLong(warehouseMax - 1) + 1));
+            input.setCurrency(currencyService.findById(random.nextLong(currencyMax - 1) + 1));
+            input.setSupplier(supplierService.findById(random.nextLong(supplierMax - 1) + 1));
             input.setDate(new Timestamp(new Date().getTime()));
             input.setCode(UUID.randomUUID().toString());
             input.setFactureNumber(random.nextInt(900000 - 100000) + 100000);
             inputService.save(input);
         }
-        for (int i = 1; i <= 50; i++) {
-            for (int j = 1; j <= 15; j++) {
+        for (int i = 1; i <= inputMax; i++) {
+            for (int j = 1; j <= inputProductMax; j++) {
                 Random random = new Random();
                 InputProduct inputProduct = new InputProduct();
-                inputProduct.setInput(inputService.findById(random.nextLong(50 - 1) + 1));
-                inputProduct.setProduct(productService.findById(random.nextLong(350 - 1) + 1));
-                inputProduct.setAmount(random.nextDouble(20 - 1) + 1);
+                inputProduct.setInput(inputService.findById(random.nextLong(inputMax - 1) + 1));
+                inputProduct.setProduct(productService.findById(random.nextLong(productMax * (categoryMax - subCategoryMin) - 1) + 1));
+                inputProduct.setAmount(random.nextDouble(inputAmountMax - 1) + 1);
                 inputProduct.setPrice(random.nextDouble(1000 - 10) + 10);
                 inputProduct.setExpireDate(new Date());
                 inputProductService.save(inputProduct);
@@ -149,40 +175,28 @@ public class DataLoader implements CommandLineRunner {
         }
     }
     private void createOutputs() {
-        for (int i = 1; i <= 50; i++) {
+        for (int i = 1; i <= inputMax; i++) {
             Random random = new Random();
             Output output = new Output();
-            output.setWarehouse(warehouseService.findById(random.nextLong(10 - 1) + 1));
-            output.setCurrency(currencyService.findById(random.nextLong(3 - 1) + 1));
-            output.setClient(clientService.findById(random.nextLong(15 - 1) + 1));
+            output.setWarehouse(warehouseService.findById(random.nextLong(warehouseMax - 1) + 1));
+            output.setCurrency(currencyService.findById(random.nextLong(currencyMax - 1) + 1));
+            output.setClient(clientService.findById(random.nextLong(supplierMax - 1) + 1));
             output.setDate(new Timestamp(new Date().getTime()));
             output.setCode(UUID.randomUUID().toString());
             output.setFactureNumber(random.nextInt(900000 - 100000) + 100000);
             outputService.save(output);
         }
-        for (int i = 1; i <= 50; i++) {
-            for (int j = 1; j <= 15; j++) {
+        for (int i = 1; i <= inputMax; i++) {
+            for (int j = 1; j <= inputProductMax; j++) {
                 Random random = new Random();
                 OutputProduct outputProduct = new OutputProduct();
-                outputProduct.setOutput(outputService.findById(random.nextLong(50 - 1) + 1));
-                outputProduct.setProduct(productService.findById(random.nextLong(350 - 1) + 1));
-                outputProduct.setAmount(random.nextDouble(20 - 1) + 1);
-                outputProduct.setPrice(random.nextDouble(1000 - 10) + 10);
+                outputProduct.setOutput(outputService.findById(random.nextLong(inputMax - 1) + 1));
+                InputProduct inputProduct = inputProductService.findById(random.nextLong(inputMax * inputProductMax - 1) + 1);
+                outputProduct.setInputProduct(inputProduct);
+                outputProduct.setAmount(random.nextDouble(inputProduct.getAmount() - 1) + 1);
+                outputProduct.setPrice(random.nextDouble(2000 - inputProduct.getPrice()) + inputProduct.getPrice());
                 outputProductService.save(outputProduct);
             }
-        }
-    }
-    private void createUsers() {
-        for (int i = 1; i <= 20; i++) {
-            Random random = new Random();
-            User user = new User();
-            user.setFirstName("username" + i);
-            user.setLastName("lastname" + i);
-            user.setPhoneNumber(String.valueOf(100000000 + new Random().nextInt(900000000)));
-            user.setPassword(Base64.getEncoder().encodeToString("123".getBytes()));
-            user.setCode(UUID.randomUUID().toString());
-            user.setWarehouses(Set.of(warehouseService.findById(random.nextLong(10 - 1) + 1)));
-            userService.save(user);
         }
     }
 }

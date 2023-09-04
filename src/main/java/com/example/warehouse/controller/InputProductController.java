@@ -4,6 +4,7 @@ import com.example.warehouse.dto.InputProductDTO;
 import com.example.warehouse.dto.Response;
 import com.example.warehouse.entity.Input;
 import com.example.warehouse.entity.InputProduct;
+import com.example.warehouse.entity.Product;
 import com.example.warehouse.service.InputProductService;
 import com.example.warehouse.service.InputService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/input-products")
@@ -29,6 +32,18 @@ public class InputProductController {
         Response response = new Response();
 
         Page<InputProduct> inputProducts = inputProductService.findAll(PageRequest.of(page, size));
+
+        response.setData(inputProducts);
+        response.setMessage(HttpStatus.OK.name());
+        return response;
+    }
+
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public Response searchByProductName(@RequestParam(name = "productName") String productName) {
+        Response response = new Response();
+
+        List<InputProduct> inputProducts = inputProductService.findAllByProductNameContainingIgnoreCase(productName);
 
         response.setData(inputProducts);
         response.setMessage(HttpStatus.OK.name());

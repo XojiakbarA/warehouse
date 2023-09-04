@@ -2,14 +2,15 @@ package com.example.warehouse.service.impl;
 
 import com.example.warehouse.dto.OutputProductInnerDTO;
 import com.example.warehouse.dto.dashboard.MostOutputProductsDTO;
+import com.example.warehouse.entity.InputProduct;
 import com.example.warehouse.entity.Output;
 import com.example.warehouse.entity.OutputProduct;
-import com.example.warehouse.entity.Product;
 import com.example.warehouse.exception.AmountExceedsException;
+import com.example.warehouse.exception.ProductOutOfStockException;
 import com.example.warehouse.exception.ResourceNotFoundException;
 import com.example.warehouse.repository.OutputProductRepository;
+import com.example.warehouse.service.InputProductService;
 import com.example.warehouse.service.OutputProductService;
-import com.example.warehouse.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,7 @@ public class OutputProductServiceImpl implements OutputProductService {
     @Autowired
     private OutputProductRepository outputProductRepository;
     @Autowired
-    private ProductService productService;
+    private InputProductService inputProductService;
 
     @Override
     public Page<OutputProduct> findAll(Pageable pageable) {
@@ -54,13 +55,15 @@ public class OutputProductServiceImpl implements OutputProductService {
 
     @Override
     public void setAttributes(OutputProductInnerDTO dto, OutputProduct outputProduct, Output output) {
-        if (dto.getProductId() != null) {
-            Product product = productService.findById(dto.getProductId());
-            outputProduct.setProduct(product);
-            checkActive(product);
-            if (product.getRemaining() < dto.getAmount()) {
-                throw new AmountExceedsException(product.getRemaining());
+        if (dto.getInputProductId() != null) {
+            InputProduct inputProduct = inputProductService.findById(dto.getInputProductId());
+            if (inputProduct.getRemaining() == 0) {
+                throw new ProductOutOfStockException(inputProduct.getProduct().getName());
             }
+            if (inputProduct.getAmount() < dto.getAmount()) {
+                throw new AmountExceedsException(inputProduct.getAmount());
+            }
+            outputProduct.setInputProduct(inputProduct);
         }
         if (dto.getAmount() != null) {
             outputProduct.setAmount(dto.getAmount());

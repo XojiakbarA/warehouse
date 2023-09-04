@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class OutputProductInnerDTO {
-    private Long productId;
+    private Long inputProductId;
     private Double amount;
     private Double price;
 }

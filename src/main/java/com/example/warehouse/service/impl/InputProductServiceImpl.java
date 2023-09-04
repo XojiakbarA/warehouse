@@ -36,6 +36,11 @@ public class InputProductServiceImpl implements InputProductService {
     }
 
     @Override
+    public List<InputProduct> findAllByProductNameContainingIgnoreCase(String productName) {
+        return inputProductRepository.findAllByProductNameContainingIgnoreCase(productName);
+    }
+
+    @Override
     public InputProduct findById(Long id) {
         return inputProductRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(InputProduct.class.getSimpleName(), id)

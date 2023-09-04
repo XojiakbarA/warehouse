@@ -25,6 +25,6 @@ public class Product extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Measurement measurement;
 
-    @Formula("(select coalesce(sum(ip.amount), 0) from input_products ip where ip.product_id=id) - (select coalesce(sum(op.amount), 0) from output_products op where op.product_id=id)")
+    @Formula("(select coalesce(sum(ip.amount), 0) from input_products ip where ip.product_id=id) - (select coalesce(sum(op.amount), 0) from input_products ip join output_products op on ip.id=op.input_product_id where ip.product_id=id)")
     private Double remaining;
 }

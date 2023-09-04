@@ -13,6 +13,7 @@ import java.util.List;
 public interface InputProductService extends ActiveCheckable {
     Page<InputProduct> findAll(Pageable pageable);
     Page<InputProduct> findAllByInputId(Long inputId, Pageable pageable);
+    List<InputProduct> findAllByProductNameContainingIgnoreCase(String productName);
     InputProduct findById(Long id);
     InputProduct save(InputProduct inputProduct);
     void deleteById(Long id);

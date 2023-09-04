@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -56,4 +57,7 @@ public class InputProduct {
     @ManyToOne(optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Input input;
+
+    @Formula("(select (amount) - (select coalesce(sum(op.amount), 0) from output_products op where op.input_product_id=id))")
+    private Double remaining;
 }
