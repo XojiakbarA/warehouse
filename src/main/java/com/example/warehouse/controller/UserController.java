@@ -46,6 +46,18 @@ public class UserController {
         return response;
     }
 
+    @GetMapping("/{id}/notifications")
+    @ResponseStatus(HttpStatus.OK)
+    public Response getByIdNotifications(@PathVariable Long id) {
+        Response response = new Response();
+
+        UserViewDTO user = mapper.userEntityToUserViewDTO(userService.findById(id));
+
+        response.setData(user.getNotifications());
+        response.setMessage(HttpStatus.OK.name());
+        return response;
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Response create(@RequestBody UserDTO dto) {

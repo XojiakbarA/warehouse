@@ -6,6 +6,7 @@ import com.example.warehouse.dto.InputSaveDTO;
 import com.example.warehouse.dto.Response;
 import com.example.warehouse.entity.Input;
 import com.example.warehouse.entity.InputProduct;
+import com.example.warehouse.event.NearToExpirePublisher;
 import com.example.warehouse.service.InputProductService;
 import com.example.warehouse.service.InputService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/inputs")
 public class InputController {
@@ -23,6 +26,8 @@ public class InputController {
     private InputService inputService;
     @Autowired
     private InputProductService inputProductService;
+    @Autowired
+    private NearToExpirePublisher nearToExpirePublisher;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -83,7 +88,9 @@ public class InputController {
 
                 inputProductService.setAttributes(inputProductDTO, inputProduct, savedInput);
 
-                inputProductService.save(inputProduct);
+                InputProduct savedInputProduct = inputProductService.save(inputProduct);
+
+                nearToExpirePublisher.publishNearToExpireEvent(savedInputProduct);
             }
         }
 

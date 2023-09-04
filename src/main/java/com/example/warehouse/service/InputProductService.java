@@ -15,11 +15,14 @@ public interface InputProductService extends ActiveCheckable {
     Page<InputProduct> findAllByInputId(Long inputId, Pageable pageable);
     List<InputProduct> findAllByProductNameContainingIgnoreCase(String productName);
     List<InputProduct> findAllNearToExpire();
+    Boolean isNearToExpire(Long id);
     Long countNearToExpire();
     InputProduct findById(Long id);
     InputProduct save(InputProduct inputProduct);
     void deleteById(Long id);
     void setAttributes(InputProductInnerDTO dto, InputProduct inputProduct, Input input);
+
+    void subtractRemainingById(Long id, Double amount);
 
     List<TotalCostDTO> findDailyInputTotalCost();
     List<TotalAmountDTO> findDailyInputTotalAmount();

@@ -57,10 +57,10 @@ public class OutputProductServiceImpl implements OutputProductService {
     public void setAttributes(OutputProductInnerDTO dto, OutputProduct outputProduct, Output output) {
         if (dto.getInputProductId() != null) {
             InputProduct inputProduct = inputProductService.findById(dto.getInputProductId());
-            if (inputProduct.getRemaining() == 0) {
+            if (inputProduct.getRemaining() == 0 || inputProduct.getRemaining() < 0) {
                 throw new ProductOutOfStockException(inputProduct.getProduct().getName());
             }
-            if (inputProduct.getAmount() < dto.getAmount()) {
+            if (inputProduct.getRemaining() < dto.getAmount()) {
                 throw new AmountExceedsException(inputProduct.getAmount());
             }
             outputProduct.setInputProduct(inputProduct);

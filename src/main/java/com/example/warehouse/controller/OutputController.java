@@ -3,6 +3,8 @@ package com.example.warehouse.controller;
 import com.example.warehouse.dto.*;
 import com.example.warehouse.entity.Output;
 import com.example.warehouse.entity.OutputProduct;
+import com.example.warehouse.event.RemoveNearToExpirePublisher;
+import com.example.warehouse.service.InputProductService;
 import com.example.warehouse.service.OutputProductService;
 import com.example.warehouse.service.OutputService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ public class OutputController {
     private OutputService outputService;
     @Autowired
     private OutputProductService outputProductService;
+    @Autowired
+    private InputProductService inputProductService;
+    @Autowired
+    private RemoveNearToExpirePublisher removeNearToExpirePublisher;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -80,7 +86,11 @@ public class OutputController {
 
                 outputProductService.setAttributes(outputProductDTO, outputProduct, savedOutput);
 
-                outputProductService.save(outputProduct);
+                OutputProduct savedOutputProduct = outputProductService.save(outputProduct);
+
+                inputProductService.subtractRemainingById(savedOutputProduct.getInputProduct().getId(), savedOutputProduct.getAmount());
+
+                removeNearToExpirePublisher.publishNearToExpireEvent(savedOutputProduct.getInputProduct());
             }
         }
 

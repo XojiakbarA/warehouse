@@ -46,6 +46,11 @@ public class InputProductServiceImpl implements InputProductService {
     }
 
     @Override
+    public Boolean isNearToExpire(Long id) {
+        return inputProductRepository.checkByIdIsNearToExpire(id);
+    }
+
+    @Override
     public Long countNearToExpire() {
         return inputProductRepository.countNearToExpire();
     }
@@ -76,6 +81,7 @@ public class InputProductServiceImpl implements InputProductService {
         }
         if (dto.getAmount() != null) {
             inputProduct.setAmount(dto.getAmount());
+            inputProduct.setRemaining(dto.getAmount());
         }
         if (dto.getPrice() != null) {
             inputProduct.setPrice(dto.getPrice());
@@ -86,6 +92,13 @@ public class InputProductServiceImpl implements InputProductService {
         if (input != null) {
             inputProduct.setInput(input);
         }
+    }
+
+    @Override
+    public void subtractRemainingById(Long id, Double amount) {
+        InputProduct inputProduct = findById(id);
+        inputProduct.setRemaining(inputProduct.getRemaining() - amount);
+        save(inputProduct);
     }
 
     @Override

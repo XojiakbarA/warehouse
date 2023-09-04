@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -36,4 +37,7 @@ public class User {
 
     @ManyToMany
     private Set<Warehouse> warehouses;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Notification> notifications;
 }

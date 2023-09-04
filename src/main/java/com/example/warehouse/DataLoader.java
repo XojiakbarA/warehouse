@@ -184,7 +184,9 @@ public class DataLoader implements CommandLineRunner {
                 InputProduct inputProduct = new InputProduct();
                 inputProduct.setInput(inputService.findById(random.nextLong(inputMax - 1) + 1));
                 inputProduct.setProduct(productService.findById(random.nextLong(productMax * (categoryMax - subCategoryMin) - 1) + 1));
-                inputProduct.setAmount(random.nextDouble(inputAmountMax - 1) + 1);
+                double amount = random.nextDouble(inputAmountMax - 1) + 1;
+                inputProduct.setAmount(amount);
+                inputProduct.setRemaining(amount);
                 inputProduct.setPrice(random.nextDouble(1000 - 10) + 10);
                 inputProduct.setExpireDate(Timestamp.valueOf(LocalDateTime.now().plusDays(20)));
                 inputProductService.save(inputProduct);

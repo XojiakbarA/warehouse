@@ -72,9 +72,9 @@ public class InputProduct {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Input input;
 
-    @Formula("(select (amount) - (select coalesce(sum(op.amount), 0) from output_products op where op.input_product_id=id))")
+    @Column(nullable = false)
     private Double remaining;
 
-    @Formula("(select extract(epoch from expire_date - now()) / 86400)")
-    private Double nearToExpire;
+    @Formula("(select expire_date - now())")
+    private String restOfExpireDate;
 }

@@ -1,11 +1,14 @@
 package com.example.warehouse.util;
 
+import com.example.warehouse.controller.NotificationDTO;
 import com.example.warehouse.dto.CurrencyAvailableDTO;
 import com.example.warehouse.dto.CurrencyViewDTO;
 import com.example.warehouse.dto.UserViewDTO;
 import com.example.warehouse.entity.Currency;
 import com.example.warehouse.entity.User;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class Mapper {
@@ -32,6 +35,14 @@ public class Mapper {
         dto.setActive(user.getActive());
         dto.setCode(user.getCode());
         dto.setWarehouses(user.getWarehouses());
+        List<NotificationDTO> notifications = user.getNotifications().stream().map(n -> {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setId(n.getId());
+            notificationDTO.setMessage(n.getMessage());
+            notificationDTO.setInputProduct(n.getInputProduct());
+            return notificationDTO;
+        }).toList();
+        dto.setNotifications(notifications);
         return dto;
     }
 }
